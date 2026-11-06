@@ -1,37 +1,29 @@
+
 const express = require("express");
+
 const {
-    getProjects,
-    createProject,
-    updateProject,
-    deleteProject
-} = require("../controllers/projectController");
-const {
-    getTasksByProject,
-    createTask
+    updateTask,
+    updateTaskStatus,
+    deleteTask
 } = require("../controllers/taskController");
+
 const { protect } = require("../middleware/authMiddleware");
 const validate = require("../middleware/validateMiddleware");
+
 const {
-    mongoIdValidator,
-    createProjectValidator,
-    updateProjectValidator
-} = require("../validators/projectValidator");
-const { createTaskValidator } = require("../validators/taskValidator");
+    taskIdValidator,
+    updateTaskValidator,
+    updateStatusValidator
+} = require("../validators/taskValidator");
 
 const router = express.Router();
 
 router.use(protect);
 
-router.route("/")
-    .get(getProjects)
-    .post(createProjectValidator, validate, createProject);
+router.put("/:id", taskIdValidator, updateTaskValidator, validate, updateTask);
 
-router.route("/:id")
-    .put(mongoIdValidator, updateProjectValidator, validate, updateProject)
-    .delete(mongoIdValidator, validate, deleteProject);
+router.patch("/:id/status", taskIdValidator, updateStatusValidator, validate, updateTaskStatus);
 
-router.route("/:id/tasks")
-    .get(mongoIdValidator, validate, getTasksByProject)
-    .post(mongoIdValidator, createTaskValidator, validate, createTask);
+router.delete("/:id", taskIdValidator, validate, deleteTask);
 
 module.exports = router;

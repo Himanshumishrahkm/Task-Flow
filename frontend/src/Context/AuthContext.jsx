@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { getCurrentUser, loginUser, registerUser } from "../services/authService";
 
+
 export const AuthContext = createContext(null);
 
 function unwrapUser(payload) {
